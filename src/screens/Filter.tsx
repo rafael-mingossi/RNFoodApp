@@ -106,7 +106,7 @@ const Filter: FC<FilterProps> = () => {
     const newSelected = selectedItems.length > 0;
 
     if (hasSelected !== newSelected) {
-      flexWidth.value = withTiming(newSelected ? verticalScale(150) : 0);
+      flexWidth.value = withTiming(newSelected ? horizontalScale(150) : 0);
       scale.value = withTiming(newSelected ? 1 : 0);
     }
 
