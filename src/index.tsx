@@ -1,18 +1,17 @@
 import React from 'react';
 import Navigator from './config/Navigator';
 import {StatusBar} from 'react-native';
-import {library} from '@fortawesome/fontawesome-svg-core';
-import {fab} from '@fortawesome/free-brands-svg-icons';
-import {faSquareCheck} from '@fortawesome/free-solid-svg-icons/faSquareCheck';
-
-library.add(fab, faSquareCheck);
+import {BottomSheetModalProvider} from '@gorhom/bottom-sheet';
+import {GestureHandlerRootView} from 'react-native-gesture-handler';
 
 const App = () => {
   return (
-    <>
-      <StatusBar backgroundColor={'#fff'} />
-      <Navigator />
-    </>
+    <GestureHandlerRootView style={{flex: 1}}>
+      <BottomSheetModalProvider>
+        <StatusBar backgroundColor={'#fff'} />
+        <Navigator />
+      </BottomSheetModalProvider>
+    </GestureHandlerRootView>
   );
 };
 

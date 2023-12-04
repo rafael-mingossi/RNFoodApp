@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useRef} from 'react';
 import {
   Text,
   View,
@@ -6,29 +6,78 @@ import {
   StyleSheet,
   TouchableOpacity,
   Image,
+  TextInput,
 } from 'react-native';
+import {BottomSheet} from '@components';
+import {useNavigation} from '@react-navigation/native';
 import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
-import {faChevronDown, faUser} from '@fortawesome/free-solid-svg-icons';
+import {
+  faChevronDown,
+  faUser,
+  faMagnifyingGlass,
+  faArrowUpAZ,
+} from '@fortawesome/free-solid-svg-icons';
 import Colors from '../../constants/Colors';
+import {BottomSheetModal} from '@gorhom/bottom-sheet';
+import {FilterPropsNavigation} from '@config';
+
+const SearchBar = () => {
+  const navigation: FilterPropsNavigation = useNavigation();
+
+  return (
+    <View style={styles.searchContainer}>
+      <View style={styles.searchSection}>
+        <View style={styles.searchField}>
+          <View style={styles.searchIcon}>
+            <FontAwesomeIcon
+              icon={faMagnifyingGlass}
+              size={18}
+              color={Colors.medium}
+            />
+          </View>
+          <TextInput
+            style={styles.input}
+            placeholder="Restaurants, groceries, dishes"
+          />
+        </View>
+        <TouchableOpacity
+          style={styles.optionButton}
+          onPress={() => navigation.navigate('Filter')}>
+          <FontAwesomeIcon
+            icon={faArrowUpAZ}
+            size={20}
+            color={Colors.primary}
+          />
+        </TouchableOpacity>
+      </View>
+    </View>
+  );
+};
 
 const CustomHeader = () => {
+  const bottomSheetRef = useRef<BottomSheetModal>(null);
+
+  const openModal = () => {
+    bottomSheetRef.current?.present();
+  };
   return (
     <SafeAreaView style={styles.safeArea}>
+      <BottomSheet ref={bottomSheetRef} />
       <View style={styles.container}>
-        <TouchableOpacity>
+        <TouchableOpacity onPress={openModal}>
           <Image
             style={styles.bike}
             source={require('../../assets/images/bike.png')}
           />
         </TouchableOpacity>
 
-        <TouchableOpacity style={styles.titleContainer}>
+        <TouchableOpacity style={styles.titleContainer} onPress={openModal}>
           <Text style={styles.title}>Delivery · Now</Text>
           <View style={styles.locationName}>
             <Text style={styles.subtitle}>London</Text>
             <FontAwesomeIcon
               icon={faChevronDown}
-              size={20}
+              size={16}
               color={Colors.primary}
             />
           </View>
@@ -38,6 +87,7 @@ const CustomHeader = () => {
           <FontAwesomeIcon icon={faUser} size={20} color={Colors.primary} />
         </TouchableOpacity>
       </View>
+      <SearchBar />
     </SafeAreaView>
   );
 };
@@ -103,7 +153,7 @@ const styles = StyleSheet.create({
     color: Colors.mediumDark,
   },
   searchIcon: {
-    paddingLeft: 10,
+    paddingLeft: 15,
   },
   optionButton: {
     padding: 10,
