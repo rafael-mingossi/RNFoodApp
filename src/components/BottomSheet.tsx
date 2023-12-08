@@ -11,23 +11,26 @@ import {
   BottomSheetModal,
   useBottomSheetModal,
 } from '@gorhom/bottom-sheet';
-import Colors from '../../constants/Colors';
+import {Colors} from '@constants';
+import {BottomSheetPropsNavigation} from '@config';
+import {useNavigation} from '@react-navigation/native';
 
 export type Ref = BottomSheetModal;
 
 const BottomSheet = forwardRef<Ref>((props, ref) => {
   const snapPoints = useMemo(() => ['50%'], []);
   const renderBackdrop = useCallback(
-    (props: any) => (
+    (newProps: any) => (
       <BottomSheetBackdrop
         appearsOnIndex={0}
         disappearsOnIndex={-1}
-        {...props}
+        {...newProps}
       />
     ),
     [],
   );
   const {dismiss} = useBottomSheetModal();
+  const navigation: BottomSheetPropsNavigation = useNavigation();
 
   return (
     <BottomSheetModal
@@ -49,7 +52,11 @@ const BottomSheet = forwardRef<Ref>((props, ref) => {
 
         <Text style={styles.subheader}>Your Location</Text>
         <>
-          <TouchableOpacity>
+          <TouchableOpacity
+            onPress={() => {
+              navigation.navigate('LocationSearch');
+              dismiss();
+            }}>
             <View style={styles.item}>
               <FontAwesomeIcon
                 icon={faLocationDot}
