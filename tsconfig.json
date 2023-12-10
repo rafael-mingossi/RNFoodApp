@@ -14,10 +14,13 @@
       "@screens": ["src/screens"],
       "@utils": ["src/utils"],
       "@components": ["src/components/"],
-//      "@hooks/*": ["/hooks/*"],
       "@config": ["src/config/"],
       "@assets": ["assets/"],
       "@constants": ["constants/"],
+      "@env": ["node_modules/react-native-dotenv"],
+      "typeRoots": [
+        "./src/types"
+      ]
     },
     "noEmit": true,
     "resolveJsonModule": true,
