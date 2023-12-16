@@ -18,9 +18,6 @@
       "@assets": ["assets/"],
       "@constants": ["constants/"],
       "@env": ["node_modules/react-native-dotenv"],
-      "typeRoots": [
-        "./src/types"
-      ]
     },
     "noEmit": true,
     "resolveJsonModule": true,

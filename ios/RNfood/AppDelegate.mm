@@ -1,11 +1,15 @@
 #import "AppDelegate.h"
+#import "RNCConfig.h"
 
 #import <React/RCTBundleURLProvider.h>
+#import <GoogleMaps/GoogleMaps.h>
 
 @implementation AppDelegate
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
+  NSString *apiUrl = [RNCConfig envFor:@"REACT_APP_GOOGLE_API_KEY"];
+  [GMSServices provideAPIKey:apiUrl];
   self.moduleName = @"RNfood";
   // You can add your custom initial props in the dictionary below.
   // They will be passed down to the ViewController used by React Native.
