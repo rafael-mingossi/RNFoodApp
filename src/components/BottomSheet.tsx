@@ -19,7 +19,7 @@ import {useNavigation} from '@react-navigation/native';
 export type Ref = BottomSheetModal;
 
 const BottomSheet = forwardRef<Ref>((props, ref) => {
-  const snapPoints = useMemo(() => ['50%'], []);
+  const snapPoints = useMemo(() => ['53%'], []);
   const renderBackdrop = useCallback(
     (newProps: any) => (
       <BottomSheetBackdrop
@@ -107,7 +107,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'center',
     gap: horizontalScale(10),
-    marginBottom: verticalScale(20),
+    marginBottom: verticalScale(6),
   },
   toggleActive: {
     backgroundColor: Colors.primary,
@@ -141,7 +141,7 @@ const styles = StyleSheet.create({
   subheader: {
     fontSize: scaleFontSize(16),
     fontWeight: '600',
-    margin: verticalScale(16),
+    margin: verticalScale(12),
   },
   item: {
     flexDirection: 'row',

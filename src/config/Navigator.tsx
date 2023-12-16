@@ -71,7 +71,7 @@ const Navigator = () => {
             name="LocationSearch"
             component={LocationSearch}
             options={{
-              headerTitle: 'Location search',
+              headerTitle: 'Search Location',
               headerShadowVisible: false,
               headerTitleAlign: 'center',
               headerStyle: {
