@@ -20,6 +20,7 @@ import {
 import Colors from '../../constants/Colors';
 import {BottomSheetModal} from '@gorhom/bottom-sheet';
 import {FilterPropsNavigation} from '@config';
+import {verticalScale} from '@utils';
 
 const SearchBar = () => {
   const navigation: FilterPropsNavigation = useNavigation();
@@ -98,7 +99,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
   },
   container: {
-    height: 60,
+    height: verticalScale(60),
     backgroundColor: '#fff',
     flexDirection: 'row',
     gap: 20,

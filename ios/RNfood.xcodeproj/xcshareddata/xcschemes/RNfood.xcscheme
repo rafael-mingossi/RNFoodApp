@@ -60,6 +60,13 @@
             ReferencedContainer = "container:RNfood.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
+      <EnvironmentVariables>
+         <EnvironmentVariable
+            key = "GOOGLE_MAPS_API_KEY"
+            value = "AIzaSyCpH6S-aihZZz-mQD69aBs8wVnIKxWSxrg"
+            isEnabled = "YES">
+         </EnvironmentVariable>
+      </EnvironmentVariables>
    </LaunchAction>
    <ProfileAction
       buildConfiguration = "Release"
