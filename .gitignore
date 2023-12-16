@@ -33,7 +33,6 @@ local.properties
 .cxx/
 *.keystore
 !debug.keystore
-keys.xml
 
 # node.js
 #
@@ -68,3 +67,4 @@ yarn-error.log
 
 # General
 .env
+/android/app/src/main/res/values/keys.xml

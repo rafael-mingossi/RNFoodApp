@@ -14,7 +14,6 @@ import {
 import {Colors} from '@constants';
 import {BottomSheetPropsNavigation} from '@config';
 import {useNavigation} from '@react-navigation/native';
-import {horizontalScale, scaleFontSize, verticalScale} from '@utils';
 
 export type Ref = BottomSheetModal;
 
@@ -106,31 +105,31 @@ const styles = StyleSheet.create({
   toggle: {
     flexDirection: 'row',
     justifyContent: 'center',
-    gap: horizontalScale(10),
-    marginBottom: verticalScale(20),
+    gap: 10,
+    marginBottom: 32,
   },
   toggleActive: {
     backgroundColor: Colors.primary,
-    padding: verticalScale(8),
+    padding: 8,
     borderRadius: 32,
-    paddingHorizontal: horizontalScale(25),
+    paddingHorizontal: 30,
   },
   activeText: {
     color: '#fff',
     fontWeight: '700',
   },
   toggleInactive: {
-    padding: verticalScale(8),
+    padding: 8,
     borderRadius: 32,
-    paddingHorizontal: horizontalScale(25),
+    paddingHorizontal: 30,
   },
   inactiveText: {
     color: Colors.primary,
   },
   button: {
     backgroundColor: Colors.primary,
-    padding: verticalScale(16),
-    margin: verticalScale(16),
+    padding: 16,
+    margin: 16,
     borderRadius: 4,
     alignItems: 'center',
   },
@@ -139,16 +138,16 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
   },
   subheader: {
-    fontSize: scaleFontSize(16),
+    fontSize: 16,
     fontWeight: '600',
-    margin: verticalScale(16),
+    margin: 16,
   },
   item: {
     flexDirection: 'row',
     gap: 8,
     alignItems: 'center',
     backgroundColor: '#fff',
-    padding: verticalScale(16),
+    padding: 16,
     borderColor: Colors.grey,
     borderWidth: 1,
   },
