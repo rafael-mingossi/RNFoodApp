@@ -17,7 +17,7 @@ import {
   faMagnifyingGlass,
   faArrowUpAZ,
 } from '@fortawesome/free-solid-svg-icons';
-import Colors from '../../constants/Colors';
+import {Colors} from '@constants';
 import {BottomSheetModal} from '@gorhom/bottom-sheet';
 import {FilterPropsNavigation} from '@config';
 
@@ -56,7 +56,6 @@ const SearchBar = () => {
 
 const CustomHeader = () => {
   const bottomSheetRef = useRef<BottomSheetModal>(null);
-
   const openModal = () => {
     bottomSheetRef.current?.present();
   };
@@ -83,7 +82,9 @@ const CustomHeader = () => {
           </View>
         </TouchableOpacity>
 
-        <TouchableOpacity style={styles.profileButton}>
+        <TouchableOpacity
+          style={styles.profileButton}
+          onPress={() => console.log('Home')}>
           <FontAwesomeIcon icon={faUser} size={20} color={Colors.primary} />
         </TouchableOpacity>
       </View>

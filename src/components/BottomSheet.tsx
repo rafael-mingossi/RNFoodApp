@@ -1,4 +1,10 @@
-import {View, Text, TouchableOpacity, StyleSheet} from 'react-native';
+import {
+  View,
+  Text,
+  TouchableOpacity,
+  StyleSheet,
+  Dimensions,
+} from 'react-native';
 import React, {forwardRef, useCallback, useMemo} from 'react';
 import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
 import {
@@ -19,7 +25,11 @@ import {useNavigation} from '@react-navigation/native';
 export type Ref = BottomSheetModal;
 
 const BottomSheet = forwardRef<Ref>((props, ref) => {
-  const snapPoints = useMemo(() => ['53%'], []);
+  const deviceHeight = Dimensions.get('window').height;
+  const snapPoints = useMemo(
+    () => (deviceHeight >= 800 ? ['47%'] : ['55%']),
+    [deviceHeight],
+  );
   const renderBackdrop = useCallback(
     (newProps: any) => (
       <BottomSheetBackdrop
