@@ -10,8 +10,12 @@ import {
 import {restaurants} from '@assets';
 import {Colors} from '@constants';
 import {horizontalScale, scaleFontSize} from '@utils';
+import {useNavigation} from '@react-navigation/native';
+import {DetailsPropsNavigation} from '@config';
 
 const Restaurants = () => {
+  const navigation: DetailsPropsNavigation = useNavigation();
+
   return (
     <ScrollView
       horizontal
@@ -20,22 +24,20 @@ const Restaurants = () => {
         paddingHorizontal: horizontalScale(20),
       }}>
       {restaurants.map((restaurant, index) => (
-        <View key={index}>
-          <TouchableOpacity>
-            <View style={styles.categoryCard}>
-              <Image source={restaurant.img} style={styles.image} />
-              <View style={styles.categoryBox}>
-                <Text style={styles.categoryText}>{restaurant.name}</Text>
-                <Text style={{color: Colors.green}}>
-                  {restaurant.rating} {restaurant.ratings}
-                </Text>
-                <Text style={{color: Colors.medium}}>
-                  {restaurant.distance}
-                </Text>
-              </View>
+        <TouchableOpacity
+          key={index}
+          onPress={() => navigation.navigate('Details')}>
+          <View style={styles.categoryCard}>
+            <Image source={restaurant.img} style={styles.image} />
+            <View style={styles.categoryBox}>
+              <Text style={styles.categoryText}>{restaurant.name}</Text>
+              <Text style={{color: Colors.green}}>
+                {restaurant.rating} {restaurant.ratings}
+              </Text>
+              <Text style={{color: Colors.medium}}>{restaurant.distance}</Text>
             </View>
-          </TouchableOpacity>
-        </View>
+          </View>
+        </TouchableOpacity>
       ))}
     </ScrollView>
   );
