@@ -1,6 +1,6 @@
 import React from 'react';
 import {TouchableOpacity} from 'react-native';
-import {Home, Filter} from '@screens';
+import {Home, Filter, LocationSearch, Details} from '@screens';
 import {CustomHeader} from '@components';
 import {horizontalScale} from '@utils';
 import {Colors} from '@constants';
@@ -9,18 +9,21 @@ import {
   NativeStackNavigationProp,
   NativeStackScreenProps,
 } from '@react-navigation/native-stack';
-import {createStackNavigator} from '@react-navigation/stack';
+import {TransitionPresets, createStackNavigator} from '@react-navigation/stack';
 import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
 import {faXmark} from '@fortawesome/free-solid-svg-icons';
+import {HeaderBackground} from '../screens/Details';
 
 export type StackNavigatorParams = {
   Home: undefined;
   Filter: undefined;
+  LocationSearch: undefined;
+  Details: undefined;
 };
 
 /////SWITCHED STACKS HERE FROM NATIVE TO STACK SO THE MODAL WOULD WORK
 // const Stack = createNativeStackNavigator<StackNavigatorParams>();
-const Stack = createStackNavigator<StackNavigatorParams>();
+const RootStack = createStackNavigator<StackNavigatorParams>();
 
 ///// SCREEN TYPE PROPS
 export type FilterProps = NativeStackScreenProps<
@@ -32,6 +35,16 @@ export type FilterProps = NativeStackScreenProps<
 export type FilterPropsNavigation = NativeStackNavigationProp<
   StackNavigatorParams,
   'Filter'
+>;
+
+export type BottomSheetPropsNavigation = NativeStackNavigationProp<
+  StackNavigatorParams,
+  'LocationSearch'
+>;
+
+export type DetailsPropsNavigation = NativeStackNavigationProp<
+  StackNavigatorParams,
+  'Details'
 >;
 
 ////// SMALL HEADER COMPONENTS
@@ -54,14 +67,41 @@ const HeaderLeft = () => {
 const Navigator = () => {
   return (
     <NavigationContainer>
-      <Stack.Navigator>
-        <Stack.Screen
-          name="Home"
-          component={Home}
-          options={{header: () => CustomHeader()}}
-        />
-        <Stack.Group screenOptions={{presentation: 'modal'}}>
-          <Stack.Screen
+      <RootStack.Navigator>
+        <RootStack.Group>
+          <RootStack.Screen
+            name="Home"
+            component={Home}
+            options={{header: () => CustomHeader()}}
+          />
+          <RootStack.Screen
+            name="LocationSearch"
+            component={LocationSearch}
+            options={{
+              headerTitle: 'Select Location',
+              headerShadowVisible: false,
+              headerTitleAlign: 'center',
+              headerStyle: {
+                backgroundColor: Colors.lightGrey,
+              },
+              headerLeft: () => HeaderLeft(),
+              ...TransitionPresets.RevealFromBottomAndroid,
+            }}
+          />
+          <RootStack.Screen
+            name={'Details'}
+            component={Details}
+            options={{
+              // headerShown: false,
+              title: '',
+              headerTransparent: true,
+              headerLeft: () => HeaderLeft(),
+              headerBackground: () => HeaderBackground(),
+            }}
+          />
+        </RootStack.Group>
+        <RootStack.Group screenOptions={{presentation: 'modal'}}>
+          <RootStack.Screen
             name="Filter"
             component={Filter}
             options={{
@@ -74,8 +114,8 @@ const Navigator = () => {
               headerLeft: () => HeaderLeft(),
             }}
           />
-        </Stack.Group>
-      </Stack.Navigator>
+        </RootStack.Group>
+      </RootStack.Navigator>
     </NavigationContainer>
   );
 };

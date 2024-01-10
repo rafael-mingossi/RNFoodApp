@@ -1,4 +1,10 @@
-import {View, Text, TouchableOpacity, StyleSheet} from 'react-native';
+import {
+  View,
+  Text,
+  TouchableOpacity,
+  StyleSheet,
+  Dimensions,
+} from 'react-native';
 import React, {forwardRef, useCallback, useMemo} from 'react';
 import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
 import {
@@ -11,23 +17,31 @@ import {
   BottomSheetModal,
   useBottomSheetModal,
 } from '@gorhom/bottom-sheet';
-import Colors from '../../constants/Colors';
+import {horizontalScale, scaleFontSize, verticalScale} from '@utils';
+import {Colors} from '@constants';
+import {BottomSheetPropsNavigation} from '@config';
+import {useNavigation} from '@react-navigation/native';
 
 export type Ref = BottomSheetModal;
 
 const BottomSheet = forwardRef<Ref>((props, ref) => {
-  const snapPoints = useMemo(() => ['50%'], []);
+  const deviceHeight = Dimensions.get('window').height;
+  const snapPoints = useMemo(
+    () => (deviceHeight >= 800 ? ['47%'] : ['55%']),
+    [deviceHeight],
+  );
   const renderBackdrop = useCallback(
-    (props: any) => (
+    (newProps: any) => (
       <BottomSheetBackdrop
         appearsOnIndex={0}
         disappearsOnIndex={-1}
-        {...props}
+        {...newProps}
       />
     ),
     [],
   );
   const {dismiss} = useBottomSheetModal();
+  const navigation: BottomSheetPropsNavigation = useNavigation();
 
   return (
     <BottomSheetModal
@@ -49,7 +63,11 @@ const BottomSheet = forwardRef<Ref>((props, ref) => {
 
         <Text style={styles.subheader}>Your Location</Text>
         <>
-          <TouchableOpacity>
+          <TouchableOpacity
+            onPress={() => {
+              navigation.navigate('LocationSearch');
+              dismiss();
+            }}>
             <View style={styles.item}>
               <FontAwesomeIcon
                 icon={faLocationDot}
@@ -98,31 +116,31 @@ const styles = StyleSheet.create({
   toggle: {
     flexDirection: 'row',
     justifyContent: 'center',
-    gap: 10,
-    marginBottom: 32,
+    gap: horizontalScale(10),
+    marginBottom: verticalScale(6),
   },
   toggleActive: {
     backgroundColor: Colors.primary,
-    padding: 8,
+    padding: verticalScale(8),
     borderRadius: 32,
-    paddingHorizontal: 30,
+    paddingHorizontal: horizontalScale(25),
   },
   activeText: {
     color: '#fff',
     fontWeight: '700',
   },
   toggleInactive: {
-    padding: 8,
+    padding: verticalScale(8),
     borderRadius: 32,
-    paddingHorizontal: 30,
+    paddingHorizontal: horizontalScale(25),
   },
   inactiveText: {
     color: Colors.primary,
   },
   button: {
     backgroundColor: Colors.primary,
-    padding: 16,
-    margin: 16,
+    padding: verticalScale(16),
+    margin: verticalScale(16),
     borderRadius: 4,
     alignItems: 'center',
   },
@@ -131,16 +149,16 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
   },
   subheader: {
-    fontSize: 16,
+    fontSize: scaleFontSize(16),
     fontWeight: '600',
-    margin: 16,
+    margin: verticalScale(12),
   },
   item: {
     flexDirection: 'row',
     gap: 8,
     alignItems: 'center',
     backgroundColor: '#fff',
-    padding: 16,
+    padding: verticalScale(16),
     borderColor: Colors.grey,
     borderWidth: 1,
   },
