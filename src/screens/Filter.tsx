@@ -179,8 +179,10 @@ const Filter: FC<FilterProps> = () => {
       <View style={{height: verticalScale(75)}} />
       <View style={styles.footer}>
         <View style={styles.btnContainer}>
-          <Animated.View style={[animatedStyles, styles.outlineButton]}>
-            <TouchableOpacity onPress={handleClearAll}>
+          <Animated.View style={[animatedStyles]}>
+            <TouchableOpacity
+              onPress={handleClearAll}
+              style={styles.outlineButton}>
               <Animated.Text style={[animatedText, styles.outlineButtonText]}>
                 Clear all
               </Animated.Text>

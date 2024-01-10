@@ -1,6 +1,6 @@
 import React from 'react';
 import {TouchableOpacity} from 'react-native';
-import {Home, Filter, LocationSearch} from '@screens';
+import {Home, Filter, LocationSearch, Details} from '@screens';
 import {CustomHeader} from '@components';
 import {horizontalScale} from '@utils';
 import {Colors} from '@constants';
@@ -12,11 +12,13 @@ import {
 import {TransitionPresets, createStackNavigator} from '@react-navigation/stack';
 import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
 import {faXmark} from '@fortawesome/free-solid-svg-icons';
+import {HeaderBackground} from '../screens/Details';
 
 export type StackNavigatorParams = {
   Home: undefined;
   Filter: undefined;
   LocationSearch: undefined;
+  Details: undefined;
 };
 
 /////SWITCHED STACKS HERE FROM NATIVE TO STACK SO THE MODAL WOULD WORK
@@ -38,6 +40,11 @@ export type FilterPropsNavigation = NativeStackNavigationProp<
 export type BottomSheetPropsNavigation = NativeStackNavigationProp<
   StackNavigatorParams,
   'LocationSearch'
+>;
+
+export type DetailsPropsNavigation = NativeStackNavigationProp<
+  StackNavigatorParams,
+  'Details'
 >;
 
 ////// SMALL HEADER COMPONENTS
@@ -79,6 +86,17 @@ const Navigator = () => {
               },
               headerLeft: () => HeaderLeft(),
               ...TransitionPresets.RevealFromBottomAndroid,
+            }}
+          />
+          <RootStack.Screen
+            name={'Details'}
+            component={Details}
+            options={{
+              // headerShown: false,
+              title: '',
+              headerTransparent: true,
+              headerLeft: () => HeaderLeft(),
+              headerBackground: () => HeaderBackground(),
             }}
           />
         </RootStack.Group>
