@@ -81,7 +81,7 @@ const styles = StyleSheet.create({
 export const HeaderBackground = () => {
   const headerAnimatedStyles = useAnimatedStyle(() => {
     return {
-      opacity: interpolate(scrollOfSet.value, [0, IMG_HEIGHT / 2.5], [0, 1]),
+      opacity: interpolate(scrollOfSet.value, [0, IMG_HEIGHT / 1.5], [0, 1]),
     };
   });
 
