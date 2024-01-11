@@ -1,5 +1,5 @@
 import React from 'react';
-import {TouchableOpacity} from 'react-native';
+import {TouchableOpacity, StyleSheet, View} from 'react-native';
 import {Home, Filter, LocationSearch, Details} from '@screens';
 import {CustomHeader} from '@components';
 import {horizontalScale} from '@utils';
@@ -11,7 +11,12 @@ import {
 } from '@react-navigation/native-stack';
 import {TransitionPresets, createStackNavigator} from '@react-navigation/stack';
 import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
-import {faXmark} from '@fortawesome/free-solid-svg-icons';
+import {
+  faXmark,
+  faArrowLeft,
+  faArrowUpFromBracket,
+  faMagnifyingGlass,
+} from '@fortawesome/free-solid-svg-icons';
 import {HeaderBackground} from '../screens/Details';
 
 export type StackNavigatorParams = {
@@ -64,6 +69,42 @@ const HeaderLeft = () => {
   );
 };
 
+const HeaderLeftDetails = () => {
+  const navigation = useNavigation();
+  return (
+    <TouchableOpacity
+      onPress={() => navigation.goBack()}
+      style={[styles.roundBtn, styles.buttonWrapper]}>
+      <FontAwesomeIcon
+        icon={faArrowLeft}
+        size={horizontalScale(18)}
+        color={Colors.primary}
+      />
+    </TouchableOpacity>
+  );
+};
+
+const HeaderRightDetails = () => {
+  return (
+    <View style={styles.rightButtons}>
+      <TouchableOpacity style={[styles.roundBtnRight, styles.buttonWrapper]}>
+        <FontAwesomeIcon
+          icon={faArrowUpFromBracket}
+          size={horizontalScale(18)}
+          color={Colors.primary}
+        />
+      </TouchableOpacity>
+      <TouchableOpacity style={[styles.roundBtnRight, styles.buttonWrapper]}>
+        <FontAwesomeIcon
+          icon={faMagnifyingGlass}
+          size={horizontalScale(18)}
+          color={Colors.primary}
+        />
+      </TouchableOpacity>
+    </View>
+  );
+};
+
 const Navigator = () => {
   return (
     <NavigationContainer>
@@ -95,7 +136,9 @@ const Navigator = () => {
               // headerShown: false,
               title: '',
               headerTransparent: true,
-              headerLeft: () => HeaderLeft(),
+              headerTintColor: Colors.primary,
+              headerLeft: () => HeaderLeftDetails(),
+              headerRight: () => HeaderRightDetails(),
               headerBackground: () => HeaderBackground(),
             }}
           />
@@ -119,5 +162,25 @@ const Navigator = () => {
     </NavigationContainer>
   );
 };
+
+const styles = StyleSheet.create({
+  buttonWrapper: {
+    width: 40,
+    height: 40,
+    borderRadius: 20,
+    backgroundColor: 'white',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  roundBtn: {
+    marginLeft: horizontalScale(15),
+  },
+  rightButtons: {
+    flexDirection: 'row',
+  },
+  roundBtnRight: {
+    marginRight: horizontalScale(15),
+  },
+});
 
 export default Navigator;

@@ -8,7 +8,7 @@ const App = () => {
   return (
     <GestureHandlerRootView style={{flex: 1}}>
       <BottomSheetModalProvider>
-        <StatusBar hidden backgroundColor={'#fff'} />
+        <StatusBar backgroundColor={'#fff'} />
         <Navigator />
       </BottomSheetModalProvider>
     </GestureHandlerRootView>

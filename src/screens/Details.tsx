@@ -1,5 +1,5 @@
 import React from 'react';
-import {View, Text, StyleSheet, Dimensions} from 'react-native';
+import {View, Text, StyleSheet, Dimensions, Platform} from 'react-native';
 import Animated, {
   interpolate,
   SharedValue,
@@ -70,19 +70,26 @@ const styles = StyleSheet.create({
     height: IMG_HEIGHT,
   },
   header: {
-    backgroundColor: '#fff',
-    height: 70,
+    // backgroundColor: '#fff',
+    height: verticalScale(50),
+    marginTop: Platform.OS === 'ios' ? verticalScale(40) : verticalScale(5),
+    alignItems: 'center',
+    justifyContent: 'center',
   },
 });
 
 export const HeaderBackground = () => {
   const headerAnimatedStyles = useAnimatedStyle(() => {
     return {
-      opacity: interpolate(scrollOfSet.value, [0, IMG_HEIGHT / 1.5], [0, 1]),
+      opacity: interpolate(scrollOfSet.value, [0, IMG_HEIGHT / 2.5], [0, 1]),
     };
   });
 
-  return <Animated.View style={[styles.header, headerAnimatedStyles]} />;
+  return (
+    <Animated.View style={[styles.header, headerAnimatedStyles]}>
+      <Text>Restaurant Details</Text>
+    </Animated.View>
+  );
 };
 
 export default Details;
