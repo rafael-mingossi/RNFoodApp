@@ -4,7 +4,6 @@ import {
   Text,
   StyleSheet,
   Dimensions,
-  Platform,
   SectionList,
   ListRenderItem,
   TouchableOpacity,
@@ -20,6 +19,7 @@ import Animated, {
 import {restaurant} from '@assets';
 import {horizontalScale, scaleFontSize, verticalScale} from '@utils';
 import {Colors} from '@constants';
+// import {useRoute} from '@react-navigation/native';
 
 const {width} = Dimensions.get('window');
 const IMG_HEIGHT = verticalScale(200);
@@ -37,6 +37,9 @@ type Meals = {
 const Details = () => {
   const scrollRef = useAnimatedRef<Animated.ScrollView>();
   scrollOfSet = useScrollViewOffset(scrollRef);
+
+  // const route = useRoute();
+  // console.log(route.name);
 
   const DATA = restaurant.food.map((item, index) => ({
     title: item.category,
@@ -73,7 +76,7 @@ const Details = () => {
   const renderListItem: ListRenderItem<Meals> = ({item}) => {
     return (
       <TouchableOpacity style={styles.renderItem}>
-        <View style={{width: width - verticalScale(80)}}>
+        <View style={{width: width - verticalScale(110)}}>
           <Text style={styles.dish}>{item.name}</Text>
           <Text style={styles.dishText}>{item.info}</Text>
           <Text style={styles.dishText}>{item.price}</Text>
@@ -85,7 +88,10 @@ const Details = () => {
 
   return (
     <View style={styles.container}>
-      <Animated.ScrollView ref={scrollRef} scrollEventThrottle={16}>
+      <Animated.ScrollView
+        ref={scrollRef}
+        scrollEventThrottle={16}
+        showsVerticalScrollIndicator={false}>
         <Animated.Image
           source={restaurant.img}
           style={[styles.image, imageAnimatedStyles]}
@@ -93,7 +99,6 @@ const Details = () => {
         <View
           style={{
             height: 1100,
-            alignItems: 'center',
             backgroundColor: '#fff',
           }}>
           <Text style={styles.restaurantName}>{restaurant.name}</Text>
@@ -106,7 +111,7 @@ const Details = () => {
           </Text>
           <Text style={styles.restaurantDescription}>{restaurant.about}</Text>
           <SectionList
-            contentContainerStyle={{paddingBottom: verticalScale(50)}}
+            contentContainerStyle={{paddingBottom: 50}}
             keyExtractor={(item, index) => `${item.id + index}`}
             scrollEnabled={false}
             sections={DATA}
@@ -135,26 +140,27 @@ const styles = StyleSheet.create({
   },
   header: {
     backgroundColor: '#fff',
-    height: verticalScale(50),
-    marginTop: Platform.OS === 'ios' ? verticalScale(40) : verticalScale(1),
+    height: verticalScale(90),
     alignItems: 'center',
-    justifyContent: 'center',
+    justifyContent: 'flex-end',
+    paddingBottom: verticalScale(20),
   },
   restaurantName: {
     fontSize: scaleFontSize(30),
     marginHorizontal: horizontalScale(16),
+    paddingVertical: verticalScale(10),
   },
   restaurantDescription: {
     fontSize: scaleFontSize(16),
     marginHorizontal: horizontalScale(16),
     lineHeight: verticalScale(22),
+    paddingVertical: verticalScale(10),
     color: Colors.medium,
   },
   sectionHeader: {
     fontSize: scaleFontSize(22),
     fontWeight: 'bold',
-    marginTop: verticalScale(40),
-    // margin: 16,
+    margin: 16,
   },
   separator: {
     height: 1,
@@ -180,6 +186,7 @@ const styles = StyleSheet.create({
   dishText: {
     fontSize: scaleFontSize(14),
     color: Colors.mediumDark,
+    paddingVertical: verticalScale(4),
   },
 });
 
@@ -192,7 +199,7 @@ export const HeaderBackground = () => {
 
   return (
     <Animated.View style={[styles.header, headerAnimatedStyles]}>
-      <Text>{restaurant.name}</Text>
+      <Text style={{fontSize: scaleFontSize(16)}}>{restaurant.name}</Text>
     </Animated.View>
   );
 };
