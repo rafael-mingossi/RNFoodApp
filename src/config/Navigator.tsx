@@ -1,10 +1,14 @@
 import React from 'react';
 import {TouchableOpacity, StyleSheet, View} from 'react-native';
-import {Home, Filter, LocationSearch, Details} from '@screens';
+import {Home, Filter, LocationSearch, Details, Dish} from '@screens';
 import {CustomHeader} from '@components';
 import {horizontalScale} from '@utils';
 import {Colors} from '@constants';
-import {NavigationContainer, useNavigation} from '@react-navigation/native';
+import {
+  NavigationContainer,
+  RouteProp,
+  useNavigation,
+} from '@react-navigation/native';
 import {
   NativeStackNavigationProp,
   NativeStackScreenProps,
@@ -24,6 +28,8 @@ export type StackNavigatorParams = {
   Filter: undefined;
   LocationSearch: undefined;
   Details: undefined;
+  Restaurants: undefined;
+  Dish: {id: number};
 };
 
 /////SWITCHED STACKS HERE FROM NATIVE TO STACK SO THE MODAL WOULD WORK
@@ -36,6 +42,16 @@ export type FilterProps = NativeStackScreenProps<
   'Filter'
 >;
 
+export type DetailsProps = NativeStackScreenProps<
+  StackNavigatorParams,
+  'Details'
+>;
+
+export type DishProps = {
+  // navigation: NativeStackScreenProps<StackNavigatorParams, 'Dish'>;
+  route: RouteProp<StackNavigatorParams, 'Dish'>;
+};
+
 ///// CUSTOM NAVIGATION PROPS, USE NAVIGATION IN NON-SCREENS
 export type FilterPropsNavigation = NativeStackNavigationProp<
   StackNavigatorParams,
@@ -47,9 +63,9 @@ export type BottomSheetPropsNavigation = NativeStackNavigationProp<
   'LocationSearch'
 >;
 
-export type DetailsPropsNavigation = NativeStackNavigationProp<
+export type RestaurantPropsNavigation = NativeStackNavigationProp<
   StackNavigatorParams,
-  'Details'
+  'Restaurants'
 >;
 
 ////// SMALL HEADER COMPONENTS
@@ -154,6 +170,15 @@ const Navigator = () => {
               headerStyle: {
                 backgroundColor: Colors.lightGrey,
               },
+              headerLeft: () => HeaderLeft(),
+            }}
+          />
+          <RootStack.Screen
+            name="Dish"
+            component={Dish}
+            options={{
+              headerTitle: '',
+              headerTransparent: true,
               headerLeft: () => HeaderLeft(),
             }}
           />

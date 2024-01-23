@@ -1,4 +1,4 @@
-import React, {useRef, useState} from 'react';
+import React, {useRef, useState, FC} from 'react';
 import {
   View,
   Text,
@@ -9,6 +9,7 @@ import {
   Image,
   ScrollView,
   SectionListRenderItem,
+  Platform,
 } from 'react-native';
 import Animated, {
   interpolate,
@@ -22,9 +23,10 @@ import Animated, {
 import {restaurant} from '@assets';
 import {horizontalScale, scaleFontSize, verticalScale} from '@utils';
 import {Colors} from '@constants';
+import {DetailsProps} from '@config';
 // import {useRoute} from '@react-navigation/native';
 
-const {width} = Dimensions.get('window');
+const {width, height} = Dimensions.get('window');
 const IMG_HEIGHT = verticalScale(200);
 
 let scrollOfSet: SharedValue<number>;
@@ -45,7 +47,7 @@ interface Section {
   index: number;
 }
 
-const Details = () => {
+const Details: FC<DetailsProps> = ({navigation}) => {
   ////USED IN THE PARALLAX SCROLL
   const scrollRef = useAnimatedRef<Animated.ScrollView>();
   scrollOfSet = useScrollViewOffset(scrollRef);
@@ -97,7 +99,13 @@ const Details = () => {
 
   const renderListItem: SectionListRenderItem<Meals, Section> = ({item}) => {
     return (
-      <TouchableOpacity style={styles.renderItem}>
+      <TouchableOpacity
+        style={styles.renderItem}
+        onPress={() =>
+          navigation.navigate('Dish', {
+            id: item.id,
+          })
+        }>
         <View style={{width: width - verticalScale(110)}}>
           <Text style={styles.dish}>{item.name}</Text>
           <Text style={styles.dishText}>{item.info}</Text>
@@ -124,12 +132,23 @@ const Details = () => {
     setActiveIndex(index);
   };
 
+  ///THIS IS FOR THE STICKY MENU SEGMENT
   const onScroll = (event: any) => {
     const y = event.nativeEvent.contentOffset.y;
     if (y > verticalScale(180)) {
       opacity.value = withTiming(1);
     } else {
       opacity.value = withTiming(0);
+    }
+  };
+
+  const handleScrollToSection = (sectionIndex: number) => {
+    const scrollViewRef = scrollRef.current;
+
+    if (scrollViewRef) {
+      const headerHeight = verticalScale(150); // Adjust based on your header height
+      const offset = sectionIndex * headerHeight;
+      scrollViewRef.scrollTo({y: offset, animated: true});
     }
   };
 
@@ -190,6 +209,7 @@ const Details = () => {
                   key={index}
                   onPress={() => {
                     selectCategory(index);
+                    handleScrollToSection(index);
                   }}
                   style={
                     activeIndex === index
@@ -226,7 +246,8 @@ const styles = StyleSheet.create({
   },
   header: {
     backgroundColor: '#fff',
-    height: verticalScale(90),
+    // height: verticalScale(90),
+    height: Platform.OS === 'ios' ? height / 7.5 : height / 8,
     alignItems: 'center',
     justifyContent: 'flex-end',
     paddingBottom: verticalScale(20),

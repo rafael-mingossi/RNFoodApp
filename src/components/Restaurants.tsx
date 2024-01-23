@@ -11,10 +11,10 @@ import {restaurants} from '@assets';
 import {Colors} from '@constants';
 import {horizontalScale, scaleFontSize} from '@utils';
 import {useNavigation} from '@react-navigation/native';
-import {DetailsPropsNavigation} from '@config';
+import {RestaurantPropsNavigation} from '@config';
 
 const Restaurants = () => {
-  const navigation: DetailsPropsNavigation = useNavigation();
+  const navigation: RestaurantPropsNavigation = useNavigation();
 
   return (
     <ScrollView
