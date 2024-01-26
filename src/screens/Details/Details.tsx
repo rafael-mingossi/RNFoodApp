@@ -2,14 +2,13 @@ import React, {useRef, useState, FC} from 'react';
 import {
   View,
   Text,
-  StyleSheet,
   Dimensions,
   SectionList,
   TouchableOpacity,
   Image,
   ScrollView,
   SectionListRenderItem,
-  Platform,
+  SafeAreaView,
 } from 'react-native';
 import Animated, {
   interpolate,
@@ -22,11 +21,12 @@ import Animated, {
 } from 'react-native-reanimated';
 import {restaurant} from '@assets';
 import {horizontalScale, scaleFontSize, verticalScale} from '@utils';
-import {Colors} from '@constants';
 import {DetailsProps} from '@config';
+import {useBasketStore} from '@store';
+import styles from './details.styles';
 // import {useRoute} from '@react-navigation/native';
 
-const {width, height} = Dimensions.get('window');
+const {width} = Dimensions.get('window');
 const IMG_HEIGHT = verticalScale(200);
 
 let scrollOfSet: SharedValue<number>;
@@ -48,6 +48,7 @@ interface Section {
 }
 
 const Details: FC<DetailsProps> = ({navigation}) => {
+  const {items, total} = useBasketStore();
   ////USED IN THE PARALLAX SCROLL
   const scrollRef = useAnimatedRef<Animated.ScrollView>();
   scrollOfSet = useScrollViewOffset(scrollRef);
@@ -230,122 +231,24 @@ const Details: FC<DetailsProps> = ({navigation}) => {
           </View>
         </View>
       </Animated.View>
+
+      {/*FOOTER BASKET*/}
+      {items > 0 && (
+        <View style={styles.footer}>
+          <SafeAreaView style={{backgroundColor: '#fff'}}>
+            <TouchableOpacity
+              style={styles.fullButton}
+              onPress={() => navigation.navigate('Basket')}>
+              <Text style={styles.basket}>{items}</Text>
+              <Text style={styles.footerText}>View Basket</Text>
+              <Text style={styles.basketTotal}>${total}</Text>
+            </TouchableOpacity>
+          </SafeAreaView>
+        </View>
+      )}
     </View>
   );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    width,
-  },
-  image: {
-    width,
-    height: IMG_HEIGHT,
-  },
-  header: {
-    backgroundColor: '#fff',
-    // height: verticalScale(90),
-    height: Platform.OS === 'ios' ? height / 7.5 : height / 8,
-    alignItems: 'center',
-    justifyContent: 'flex-end',
-    paddingBottom: verticalScale(20),
-  },
-  restaurantName: {
-    fontSize: scaleFontSize(30),
-    marginHorizontal: horizontalScale(16),
-    paddingVertical: verticalScale(10),
-  },
-  restaurantDescription: {
-    fontSize: scaleFontSize(16),
-    marginHorizontal: horizontalScale(16),
-    lineHeight: verticalScale(22),
-    paddingVertical: verticalScale(10),
-    color: Colors.medium,
-  },
-  sectionHeader: {
-    fontSize: scaleFontSize(22),
-    fontWeight: 'bold',
-    margin: 16,
-  },
-  separator: {
-    height: 1,
-    backgroundColor: Colors.grey,
-    marginHorizontal: horizontalScale(16),
-  },
-  renderItem: {
-    flexDirection: 'row',
-    backgroundColor: 'white',
-    padding: 16,
-    paddingHorizontal: horizontalScale(16),
-    paddingVertical: verticalScale(16),
-  },
-  itemImg: {
-    width: verticalScale(80),
-    height: horizontalScale(80),
-    borderRadius: 4,
-  },
-  dish: {
-    fontSize: scaleFontSize(16),
-    fontWeight: 'bold',
-  },
-  dishText: {
-    fontSize: scaleFontSize(14),
-    color: Colors.mediumDark,
-    paddingVertical: verticalScale(4),
-  },
-  stickySegment: {
-    position: 'absolute',
-    height: 50,
-    left: 0,
-    right: 0,
-    top: verticalScale(90.05),
-    backgroundColor: '#fff',
-    overflow: 'hidden',
-    paddingBottom: 4,
-  },
-  segmentsShadow: {
-    backgroundColor: '#fff',
-    justifyContent: 'center',
-    shadowColor: '#000',
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowOpacity: 0.1,
-    shadowRadius: 4,
-    elevation: 5,
-    width: '100%',
-    height: '100%',
-  },
-  segmentButton: {
-    paddingHorizontal: horizontalScale(16),
-    paddingVertical: verticalScale(4),
-    borderRadius: 50,
-  },
-  segmentButtonActive: {
-    backgroundColor: Colors.primary,
-    paddingHorizontal: horizontalScale(16),
-    paddingVertical: verticalScale(4),
-    borderRadius: 50,
-  },
-  segmentText: {
-    color: Colors.primary,
-    fontSize: scaleFontSize(16),
-  },
-  segmentTextActive: {
-    color: '#fff',
-    fontWeight: 'bold',
-    fontSize: scaleFontSize(16),
-  },
-  segmentScrollView: {
-    paddingHorizontal: horizontalScale(16),
-    alignItems: 'center',
-    gap: 20,
-    paddingBottom: 4,
-  },
-});
 
 export const HeaderBackground = () => {
   const headerAnimatedStyles = useAnimatedStyle(() => {

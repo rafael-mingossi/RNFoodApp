@@ -1,6 +1,6 @@
 import React from 'react';
 import {TouchableOpacity, StyleSheet, View} from 'react-native';
-import {Home, Filter, LocationSearch, Details, Dish} from '@screens';
+import {Home, Filter, LocationSearch, Details, Dish, Basket} from '@screens';
 import {CustomHeader} from '@components';
 import {horizontalScale} from '@utils';
 import {Colors} from '@constants';
@@ -21,7 +21,7 @@ import {
   faArrowUpFromBracket,
   faMagnifyingGlass,
 } from '@fortawesome/free-solid-svg-icons';
-import {HeaderBackground} from '../screens/Details';
+import {HeaderBackground} from '../screens/Details/Details';
 
 export type StackNavigatorParams = {
   Home: undefined;
@@ -30,6 +30,7 @@ export type StackNavigatorParams = {
   Details: undefined;
   Restaurants: undefined;
   Dish: {id: number};
+  Basket: undefined;
 };
 
 /////SWITCHED STACKS HERE FROM NATIVE TO STACK SO THE MODAL WOULD WORK
@@ -51,6 +52,11 @@ export type DishProps = {
   // navigation: NativeStackScreenProps<StackNavigatorParams, 'Dish'>;
   route: RouteProp<StackNavigatorParams, 'Dish'>;
 };
+
+export type BasketProps = NativeStackScreenProps<
+  StackNavigatorParams,
+  'Basket'
+>;
 
 ///// CUSTOM NAVIGATION PROPS, USE NAVIGATION IN NON-SCREENS
 export type FilterPropsNavigation = NativeStackNavigationProp<
@@ -156,6 +162,15 @@ const Navigator = () => {
               headerLeft: () => HeaderLeftDetails(),
               headerRight: () => HeaderRightDetails(),
               headerBackground: () => HeaderBackground(),
+            }}
+          />
+          <RootStack.Screen
+            name="Basket"
+            component={Basket}
+            options={{
+              headerTitleAlign: 'center',
+              headerLeft: () => HeaderLeftDetails(),
+              // headerRight: () => HeaderRightDetails(),
             }}
           />
         </RootStack.Group>
