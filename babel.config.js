@@ -22,6 +22,7 @@ module.exports = {
           '@utils': './src/utils',
           '@assets': './assets',
           '@constants': './constants',
+          '@store': './src/store/',
           '@env': ['node_modules/react-native-dotenv'],
         },
       },

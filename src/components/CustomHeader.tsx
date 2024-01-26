@@ -20,6 +20,7 @@ import {
 import {Colors} from '@constants';
 import {BottomSheetModal} from '@gorhom/bottom-sheet';
 import {FilterPropsNavigation} from '@config';
+import {verticalScale} from '@utils';
 
 const SearchBar = () => {
   const navigation: FilterPropsNavigation = useNavigation();
@@ -97,6 +98,8 @@ const styles = StyleSheet.create({
   safeArea: {
     flex: 1,
     backgroundColor: '#fff',
+    // THIS IS REPLACING STATUSBAR SPACE
+    paddingTop: verticalScale(20),
   },
   container: {
     height: 60,

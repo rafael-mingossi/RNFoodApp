@@ -1,10 +1,14 @@
 import React from 'react';
 import {TouchableOpacity, StyleSheet, View} from 'react-native';
-import {Home, Filter, LocationSearch, Details} from '@screens';
+import {Home, Filter, LocationSearch, Details, Dish, Basket} from '@screens';
 import {CustomHeader} from '@components';
 import {horizontalScale} from '@utils';
 import {Colors} from '@constants';
-import {NavigationContainer, useNavigation} from '@react-navigation/native';
+import {
+  NavigationContainer,
+  RouteProp,
+  useNavigation,
+} from '@react-navigation/native';
 import {
   NativeStackNavigationProp,
   NativeStackScreenProps,
@@ -17,13 +21,16 @@ import {
   faArrowUpFromBracket,
   faMagnifyingGlass,
 } from '@fortawesome/free-solid-svg-icons';
-import {HeaderBackground} from '../screens/Details';
+import {HeaderBackground} from '../screens/Details/Details';
 
 export type StackNavigatorParams = {
   Home: undefined;
   Filter: undefined;
   LocationSearch: undefined;
   Details: undefined;
+  Restaurants: undefined;
+  Dish: {id: number};
+  Basket: undefined;
 };
 
 /////SWITCHED STACKS HERE FROM NATIVE TO STACK SO THE MODAL WOULD WORK
@@ -34,6 +41,21 @@ const RootStack = createStackNavigator<StackNavigatorParams>();
 export type FilterProps = NativeStackScreenProps<
   StackNavigatorParams,
   'Filter'
+>;
+
+export type DetailsProps = NativeStackScreenProps<
+  StackNavigatorParams,
+  'Details'
+>;
+
+export type DishProps = {
+  // navigation: NativeStackScreenProps<StackNavigatorParams, 'Dish'>;
+  route: RouteProp<StackNavigatorParams, 'Dish'>;
+};
+
+export type BasketProps = NativeStackScreenProps<
+  StackNavigatorParams,
+  'Basket'
 >;
 
 ///// CUSTOM NAVIGATION PROPS, USE NAVIGATION IN NON-SCREENS
@@ -47,9 +69,9 @@ export type BottomSheetPropsNavigation = NativeStackNavigationProp<
   'LocationSearch'
 >;
 
-export type DetailsPropsNavigation = NativeStackNavigationProp<
+export type RestaurantPropsNavigation = NativeStackNavigationProp<
   StackNavigatorParams,
-  'Details'
+  'Restaurants'
 >;
 
 ////// SMALL HEADER COMPONENTS
@@ -142,6 +164,15 @@ const Navigator = () => {
               headerBackground: () => HeaderBackground(),
             }}
           />
+          <RootStack.Screen
+            name="Basket"
+            component={Basket}
+            options={{
+              headerTitleAlign: 'center',
+              headerLeft: () => HeaderLeftDetails(),
+              // headerRight: () => HeaderRightDetails(),
+            }}
+          />
         </RootStack.Group>
         <RootStack.Group screenOptions={{presentation: 'modal'}}>
           <RootStack.Screen
@@ -154,6 +185,15 @@ const Navigator = () => {
               headerStyle: {
                 backgroundColor: Colors.lightGrey,
               },
+              headerLeft: () => HeaderLeft(),
+            }}
+          />
+          <RootStack.Screen
+            name="Dish"
+            component={Dish}
+            options={{
+              headerTitle: '',
+              headerTransparent: true,
               headerLeft: () => HeaderLeft(),
             }}
           />
