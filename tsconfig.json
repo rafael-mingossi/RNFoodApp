@@ -17,6 +17,7 @@
       "@config": ["src/config/"],
       "@assets": ["assets/"],
       "@constants": ["constants/"],
+      "@store": ["src/store/"],
       "@env": ["node_modules/react-native-dotenv"],
     },
     "noEmit": true,
