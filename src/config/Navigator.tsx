@@ -22,6 +22,7 @@ import {
   faMagnifyingGlass,
 } from '@fortawesome/free-solid-svg-icons';
 import {HeaderBackground} from '../screens/Details/Details';
+import BootSplash from 'react-native-bootsplash';
 
 export type StackNavigatorParams = {
   Home: undefined;
@@ -129,7 +130,10 @@ const HeaderRightDetails = () => {
 
 const Navigator = () => {
   return (
-    <NavigationContainer>
+    <NavigationContainer
+      onReady={() => {
+        BootSplash.hide();
+      }}>
       <RootStack.Navigator>
         <RootStack.Group>
           <RootStack.Screen
