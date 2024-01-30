@@ -1,4 +1,4 @@
-package com.rnfood;
+package com.foodapprafs;
 
 import android.app.Application;
 import com.facebook.react.PackageList;
