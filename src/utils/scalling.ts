@@ -8,6 +8,15 @@ const {width, height} = Dimensions.get('window');
 // NOTCH IS FOR NEW DEVICES WITH CAMERA THAT USES SCREEN SPACE
 const isSmall = width <= 375 && !DeviceInfo.hasNotch();
 
+const getResponsive = (
+  valueInPixels: number,
+  deviceDimension: 'width' | 'height',
+) => {
+  const dimension: number = Dimensions.get('window')[deviceDimension];
+  const valuePercentage = valueInPixels / dimension;
+  return dimension * valuePercentage;
+};
+
 const guidelineBaseWidth = () => {
   if (isSmall) {
     return 330;
@@ -37,4 +46,4 @@ const verticalScale = (size: number) => (height / guidelineBaseHeight()) * size;
 const scaleFontSize = (size: number) =>
   Math.round((size * width) / guidelineBaseFonts());
 
-export {horizontalScale, verticalScale, scaleFontSize};
+export {horizontalScale, verticalScale, scaleFontSize, getResponsive};

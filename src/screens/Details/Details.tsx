@@ -12,6 +12,7 @@ import {
 } from 'react-native';
 import Animated, {
   interpolate,
+  interpolateColor,
   SharedValue,
   useAnimatedRef,
   useAnimatedStyle,
@@ -20,14 +21,27 @@ import Animated, {
   withTiming,
 } from 'react-native-reanimated';
 import {restaurant} from '@assets';
-import {horizontalScale, scaleFontSize, verticalScale} from '@utils';
+import {
+  horizontalScale,
+  scaleFontSize,
+  verticalScale,
+  getResponsive,
+} from '@utils';
 import {DetailsProps} from '@config';
 import {useBasketStore} from '@store';
 import styles from './details.styles';
+import {useSafeAreaInsets} from 'react-native-safe-area-context';
+import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
+import {
+  faArrowLeft,
+  faArrowUpFromBracket,
+  faMagnifyingGlass,
+} from '@fortawesome/free-solid-svg-icons';
+import {Colors} from '@constants';
 // import {useRoute} from '@react-navigation/native';
 
 const {width} = Dimensions.get('window');
-const IMG_HEIGHT = verticalScale(200);
+const IMG_HEIGHT = getResponsive(200, 'height');
 
 let scrollOfSet: SharedValue<number>;
 
@@ -49,6 +63,9 @@ interface Section {
 
 const Details: FC<DetailsProps> = ({navigation}) => {
   const {items, total} = useBasketStore();
+  const {top} = useSafeAreaInsets();
+  console.log('NOTCH TOP =>>', top);
+
   ////USED IN THE PARALLAX SCROLL
   const scrollRef = useAnimatedRef<Animated.ScrollView>();
   scrollOfSet = useScrollViewOffset(scrollRef);
@@ -155,6 +172,7 @@ const Details: FC<DetailsProps> = ({navigation}) => {
 
   return (
     <View style={styles.container}>
+      <HeaderBackground />
       <Animated.ScrollView
         onScroll={onScroll}
         ref={scrollRef}
@@ -257,9 +275,46 @@ export const HeaderBackground = () => {
     };
   });
 
+  const headerAnimatedBg = useAnimatedStyle(() => {
+    return {
+      backgroundColor: interpolateColor(
+        scrollOfSet.value,
+        [0, IMG_HEIGHT / 1.5],
+        ['transparent', 'white'],
+      ),
+    };
+  });
+
   return (
-    <Animated.View style={[styles.header, headerAnimatedStyles]}>
-      <Text style={{fontSize: scaleFontSize(16)}}>{restaurant.name}</Text>
+    <Animated.View style={[styles.header, headerAnimatedBg]}>
+      <TouchableOpacity
+        // onPress={() => navigation.goBack()}
+        style={[styles.roundBtn, styles.buttonWrapper]}>
+        <FontAwesomeIcon
+          icon={faArrowLeft}
+          size={horizontalScale(18)}
+          color={Colors.primary}
+        />
+      </TouchableOpacity>
+      <Animated.View style={[headerAnimatedStyles]}>
+        <Text style={{fontSize: scaleFontSize(16)}}>{restaurant.name}</Text>
+      </Animated.View>
+      <View style={styles.rightButtons}>
+        <TouchableOpacity style={[styles.roundBtnRight, styles.buttonWrapper]}>
+          <FontAwesomeIcon
+            icon={faArrowUpFromBracket}
+            size={horizontalScale(18)}
+            color={Colors.primary}
+          />
+        </TouchableOpacity>
+        <TouchableOpacity style={[styles.roundBtnRight, styles.buttonWrapper]}>
+          <FontAwesomeIcon
+            icon={faMagnifyingGlass}
+            size={horizontalScale(18)}
+            color={Colors.primary}
+          />
+        </TouchableOpacity>
+      </View>
     </Animated.View>
   );
 };

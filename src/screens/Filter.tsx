@@ -273,9 +273,12 @@ const styles = StyleSheet.create({
   },
   btnContainer: {
     flexDirection: 'row',
-    gap: horizontalScale(12),
+    // gap: horizontalScale(12),
     justifyContent: 'center',
   },
+  // clearBtn: {
+  //   marginRight: horizontalScale(12),
+  // },
   outlineButton: {
     borderColor: Colors.primary,
     borderWidth: 0.5,
@@ -283,6 +286,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     borderRadius: 8,
     height: verticalScale(50),
+    marginRight: horizontalScale(12),
   },
   outlineButtonText: {
     color: Colors.primary,

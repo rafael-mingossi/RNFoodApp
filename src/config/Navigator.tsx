@@ -21,7 +21,6 @@ import {
   faArrowUpFromBracket,
   faMagnifyingGlass,
 } from '@fortawesome/free-solid-svg-icons';
-import {HeaderBackground} from '../screens/Details/Details';
 import BootSplash from 'react-native-bootsplash';
 
 export type StackNavigatorParams = {
@@ -159,13 +158,18 @@ const Navigator = () => {
             name={'Details'}
             component={Details}
             options={{
-              // headerShown: false,
-              title: '',
+              headerShown: false,
+              // headerTitle: 'Details 2',
+              headerTitle: '',
               headerTransparent: true,
-              headerTintColor: Colors.primary,
+              // headerTintColor: Colors.primary,
+              // headerTitle: () => <HeaderBackground />,
               headerLeft: () => HeaderLeftDetails(),
               headerRight: () => HeaderRightDetails(),
-              headerBackground: () => HeaderBackground(),
+              // headerBackground: () => WhiteBg(),
+              headerStyle: {
+                backgroundColor: 'white',
+              },
             }}
           />
           <RootStack.Screen
