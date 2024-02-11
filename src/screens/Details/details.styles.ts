@@ -22,14 +22,15 @@ const styles = StyleSheet.create({
   header: {
     height: verticalScale(80),
     alignItems: 'center',
-    justifyContent: 'space-around',
+    justifyContent: 'space-between',
     flexDirection: 'row',
     position: 'absolute',
     top: 0,
     left: 0,
     right: 0,
     zIndex: 100,
-    paddingTop: verticalScale(25),
+    paddingTop: verticalScale(40),
+    paddingHorizontal: horizontalScale(12),
   },
   restaurantName: {
     fontSize: scaleFontSize(30),
@@ -169,7 +170,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
   },
   roundBtnRight: {
-    marginRight: horizontalScale(15),
+    marginRight: horizontalScale(10),
   },
   buttonWrapper: {
     width: 40,
@@ -179,9 +180,9 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
-  roundBtn: {
-    marginLeft: horizontalScale(15),
-  },
+  // roundBtn: {
+  //   marginLeft: horizontalScale(1),
+  // },
 });
 
 export default styles;

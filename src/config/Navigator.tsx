@@ -27,10 +27,11 @@ export type StackNavigatorParams = {
   Home: undefined;
   Filter: undefined;
   LocationSearch: undefined;
-  Details: undefined;
+  Details: {id: number};
   Restaurants: undefined;
   Dish: {id: number};
   Basket: undefined;
+  Header: undefined;
 };
 
 /////SWITCHED STACKS HERE FROM NATIVE TO STACK SO THE MODAL WOULD WORK
@@ -72,6 +73,11 @@ export type BottomSheetPropsNavigation = NativeStackNavigationProp<
 export type RestaurantPropsNavigation = NativeStackNavigationProp<
   StackNavigatorParams,
   'Restaurants'
+>;
+
+export type HeaderPropsNavigation = NativeStackNavigationProp<
+  StackNavigatorParams,
+  'Header'
 >;
 
 ////// SMALL HEADER COMPONENTS
@@ -131,7 +137,7 @@ const Navigator = () => {
   return (
     <NavigationContainer
       onReady={() => {
-        BootSplash.hide();
+        BootSplash.hide().then(() => {});
       }}>
       <RootStack.Navigator>
         <RootStack.Group>
