@@ -6,12 +6,12 @@ import {
   SectionList,
   TouchableOpacity,
   Image,
-  ScrollView,
   SectionListRenderItem,
   SafeAreaView,
 } from 'react-native';
 import Animated, {
   interpolate,
+  interpolateColor,
   SharedValue,
   useAnimatedRef,
   useAnimatedStyle,
@@ -20,14 +20,28 @@ import Animated, {
   withTiming,
 } from 'react-native-reanimated';
 import {restaurant} from '@assets';
-import {horizontalScale, scaleFontSize, verticalScale} from '@utils';
-import {DetailsProps} from '@config';
+import {
+  horizontalScale,
+  scaleFontSize,
+  verticalScale,
+  getResponsive,
+} from '@utils';
+import {DetailsProps, HeaderPropsNavigation} from '@config';
 import {useBasketStore} from '@store';
 import styles from './details.styles';
+import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
+import {
+  faArrowLeft,
+  faArrowUpFromBracket,
+  faMagnifyingGlass,
+} from '@fortawesome/free-solid-svg-icons';
+import {Colors} from '@constants';
+import {getRestaurantById} from '@assets';
+import {useNavigation} from '@react-navigation/native';
 // import {useRoute} from '@react-navigation/native';
 
 const {width} = Dimensions.get('window');
-const IMG_HEIGHT = verticalScale(200);
+const IMG_HEIGHT = getResponsive(200, 'height');
 
 let scrollOfSet: SharedValue<number>;
 
@@ -47,22 +61,26 @@ interface Section {
   index: number;
 }
 
-const Details: FC<DetailsProps> = ({navigation}) => {
+const Details: FC<DetailsProps> = ({navigation, route}) => {
   const {items, total} = useBasketStore();
+  const {id} = route.params;
+  const item = getRestaurantById(id)!;
+
   ////USED IN THE PARALLAX SCROLL
   const scrollRef = useAnimatedRef<Animated.ScrollView>();
   scrollOfSet = useScrollViewOffset(scrollRef);
 
   ////USED IN THE STICKY MENU BAR
-  const scrollRefSticky = useRef<ScrollView>(null);
-  const itemsRef = useRef<TouchableOpacity[]>([]);
+  // const scrollRefSticky = useRef<ScrollView>(null);
+  // const itemsRef = useRef<TouchableOpacity[]>([]);
+  const tabRef = useRef<SectionList<Item, Section>>(null);
 
   const opacity = useSharedValue(0);
   // const route = useRoute();
   // console.log(route.name);
   const [activeIndex, setActiveIndex] = useState(0);
 
-  const DATA = restaurant.food.map((item, index) => ({
+  const DATA = item.food.map((item, index) => ({
     title: item.category,
     data: item.meals,
     index,
@@ -117,21 +135,22 @@ const Details: FC<DetailsProps> = ({navigation}) => {
     );
   };
 
-  const selectCategory = (index: number) => {
-    ///SELECT THE CURRENT SELECTED BTN
-    const selectedBtn = itemsRef.current[index];
-
-    selectedBtn.measure(x => {
-      scrollRefSticky.current?.scrollTo({
-        x: x - horizontalScale(16),
-        y: 0,
-        animated: true,
-      });
-    });
-
-    ///SETTING INDEX TO HIGHLIGHT SELECTED BTN
-    setActiveIndex(index);
-  };
+  // THIS IS FOR THE STICKY HEADER
+  // const selectCategory = (index: number) => {
+  //   ///SELECT THE CURRENT SELECTED BTN
+  //   const selectedBtn = itemsRef.current[index];
+  //
+  //   selectedBtn.measure(x => {
+  //     scrollRefSticky.current?.scrollTo({
+  //       x: x - horizontalScale(16),
+  //       y: 0,
+  //       animated: true,
+  //     });
+  //   });
+  //
+  //   ///SETTING INDEX TO HIGHLIGHT SELECTED BTN
+  //   setActiveIndex(index);
+  // };
 
   ///THIS IS FOR THE STICKY MENU SEGMENT
   const onScroll = (event: any) => {
@@ -143,41 +162,46 @@ const Details: FC<DetailsProps> = ({navigation}) => {
     }
   };
 
-  const handleScrollToSection = (sectionIndex: number) => {
-    const scrollViewRef = scrollRef.current;
-
-    if (scrollViewRef) {
-      const headerHeight = verticalScale(150); // Adjust based on your header height
-      const offset = sectionIndex * headerHeight;
-      scrollViewRef.scrollTo({y: offset, animated: true});
-    }
-  };
+  // THIS IS TO SCROLL TO LOCATION
+  // const handleScrollToSection = (sectionIndex: number) => {
+  //   const hasData = DATA[sectionIndex]?.data;
+  //
+  //   if (hasData && tabRef.current) {
+  //     tabRef?.current?.scrollToLocation({
+  //       sectionIndex: DATA[sectionIndex].index,
+  //       itemIndex: 0,
+  //     });
+  //   }
+  // };
 
   return (
     <View style={styles.container}>
+      <HeaderBackground />
       <Animated.ScrollView
         onScroll={onScroll}
         ref={scrollRef}
         scrollEventThrottle={16}
         showsVerticalScrollIndicator={false}>
         <Animated.Image
-          source={restaurant.img}
+          source={item.img}
           style={[styles.image, imageAnimatedStyles]}
         />
         <View
           style={{
             backgroundColor: '#fff',
           }}>
-          <Text style={styles.restaurantName}>{restaurant.name}</Text>
+          <Text style={styles.restaurantName}>{item.name}</Text>
           <Text style={styles.restaurantDescription}>
-            {restaurant.delivery} •{' '}
-            {restaurant.tags.map(
+            {item.delivery} •{' '}
+            {item.tags.map(
               (tag, index) =>
-                `${tag}${index < restaurant.tags.length - 1 ? ' • ' : ''}`,
+                `${tag}${index < item.tags.length - 1 ? ' • ' : ''}`,
             )}
           </Text>
-          <Text style={styles.restaurantDescription}>{restaurant.about}</Text>
+          <Text style={styles.restaurantDescription}>{item.about}</Text>
+          {/*/////SECTION LIST GOES HERE/////*/}
           <SectionList
+            ref={tabRef}
             stickySectionHeadersEnabled={false}
             contentContainerStyle={{paddingBottom: 50}}
             keyExtractor={(item, index) => `${item.id + index}`}
@@ -185,52 +209,65 @@ const Details: FC<DetailsProps> = ({navigation}) => {
             sections={DATA}
             renderItem={renderListItem}
             renderSectionHeader={({section: {title}}) => (
-              <Text style={styles.sectionHeader}>{title}</Text>
+              <Text style={styles.sectionHeader}> {title}</Text>
             )}
             ItemSeparatorComponent={() => separatorLine()}
             SectionSeparatorComponent={() => separatorLine()}
+            onScrollToIndexFailed={err => {
+              const wait = new Promise(resolve => setTimeout(resolve, 600));
+              wait.then(() => {
+                tabRef?.current?.scrollToLocation({
+                  animated: true,
+                  sectionIndex: 1,
+                  itemIndex: 1,
+                  viewOffset: 0.5,
+                });
+              });
+            }}
           />
         </View>
       </Animated.ScrollView>
-      <Animated.View style={[styles.stickySegment, animatedStyles]}>
-        <View
-          style={{
-            overflow: 'hidden',
-            paddingBottom: 4,
-          }}>
-          <View style={styles.segmentsShadow}>
-            <ScrollView
-              ref={scrollRefSticky}
-              horizontal
-              showsHorizontalScrollIndicator={false}
-              contentContainerStyle={styles.segmentScrollView}>
-              {restaurant.food.map((item, index) => (
-                <TouchableOpacity
-                  ref={ref => (itemsRef.current[index] = ref!)}
-                  key={index}
-                  onPress={() => {
-                    selectCategory(index);
-                    handleScrollToSection(index);
-                  }}
-                  style={
-                    activeIndex === index
-                      ? styles.segmentButtonActive
-                      : styles.segmentButton
-                  }>
-                  <Text
-                    style={
-                      activeIndex === index
-                        ? styles.segmentTextActive
-                        : styles.segmentText
-                    }>
-                    {item.category}
-                  </Text>
-                </TouchableOpacity>
-              ))}
-            </ScrollView>
-          </View>
-        </View>
-      </Animated.View>
+
+      {/*//////ADD ANIMATED STYLE BACK HERE*/}
+      {/*<Animated.View style={[styles.stickySegment]}>*/}
+      {/*  <View*/}
+      {/*    style={{*/}
+      {/*      overflow: 'hidden',*/}
+      {/*      paddingBottom: 4,*/}
+      {/*    }}>*/}
+      {/*    <View style={styles.segmentsShadow}>*/}
+      {/*      <ScrollView*/}
+      {/*        ref={scrollRefSticky}*/}
+      {/*        horizontal*/}
+      {/*        showsHorizontalScrollIndicator={false}*/}
+      {/*        contentContainerStyle={styles.segmentScrollView}>*/}
+      {/*        {restaurant.food.map((item, index) => (*/}
+      {/*          <TouchableOpacity*/}
+      {/*            ref={ref => (itemsRef.current[index] = ref!)}*/}
+      {/*            key={index}*/}
+      {/*            onPress={() => {*/}
+      {/*              selectCategory(index);*/}
+      {/*              handleScrollToSection(index);*/}
+      {/*            }}*/}
+      {/*            style={*/}
+      {/*              activeIndex === index*/}
+      {/*                ? styles.segmentButtonActive*/}
+      {/*                : styles.segmentButton*/}
+      {/*            }>*/}
+      {/*            <Text*/}
+      {/*              style={*/}
+      {/*                activeIndex === index*/}
+      {/*                  ? styles.segmentTextActive*/}
+      {/*                  : styles.segmentText*/}
+      {/*              }>*/}
+      {/*              {item.category}*/}
+      {/*            </Text>*/}
+      {/*          </TouchableOpacity>*/}
+      {/*        ))}*/}
+      {/*      </ScrollView>*/}
+      {/*    </View>*/}
+      {/*  </View>*/}
+      {/*</Animated.View>*/}
 
       {/*FOOTER BASKET*/}
       {items > 0 && (
@@ -241,7 +278,7 @@ const Details: FC<DetailsProps> = ({navigation}) => {
               onPress={() => navigation.navigate('Basket')}>
               <Text style={styles.basket}>{items}</Text>
               <Text style={styles.footerText}>View Basket</Text>
-              <Text style={styles.basketTotal}>${total}</Text>
+              <Text style={styles.basketTotal}>${total.toFixed(2)}</Text>
             </TouchableOpacity>
           </SafeAreaView>
         </View>
@@ -251,15 +288,54 @@ const Details: FC<DetailsProps> = ({navigation}) => {
 };
 
 export const HeaderBackground = () => {
+  const navigation: HeaderPropsNavigation = useNavigation();
+
   const headerAnimatedStyles = useAnimatedStyle(() => {
     return {
       opacity: interpolate(scrollOfSet.value, [0, IMG_HEIGHT / 1.5], [0, 1]),
     };
   });
 
+  const headerAnimatedBg = useAnimatedStyle(() => {
+    return {
+      backgroundColor: interpolateColor(
+        scrollOfSet.value,
+        [0, IMG_HEIGHT / 1.5],
+        ['transparent', 'white'],
+      ),
+    };
+  });
+
   return (
-    <Animated.View style={[styles.header, headerAnimatedStyles]}>
-      <Text style={{fontSize: scaleFontSize(16)}}>{restaurant.name}</Text>
+    <Animated.View style={[styles.header, headerAnimatedBg]}>
+      <TouchableOpacity
+        onPress={() => navigation.goBack()}
+        style={[styles.buttonWrapper]}>
+        <FontAwesomeIcon
+          icon={faArrowLeft}
+          size={horizontalScale(18)}
+          color={Colors.primary}
+        />
+      </TouchableOpacity>
+      <Animated.View style={[headerAnimatedStyles]}>
+        <Text style={{fontSize: scaleFontSize(16)}}>{restaurant.name}</Text>
+      </Animated.View>
+      <View style={styles.rightButtons}>
+        <TouchableOpacity style={[styles.roundBtnRight, styles.buttonWrapper]}>
+          <FontAwesomeIcon
+            icon={faArrowUpFromBracket}
+            size={horizontalScale(18)}
+            color={Colors.primary}
+          />
+        </TouchableOpacity>
+        <TouchableOpacity style={[styles.roundBtnRight, styles.buttonWrapper]}>
+          <FontAwesomeIcon
+            icon={faMagnifyingGlass}
+            size={horizontalScale(18)}
+            color={Colors.primary}
+          />
+        </TouchableOpacity>
+      </View>
     </Animated.View>
   );
 };

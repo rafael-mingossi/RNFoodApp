@@ -21,17 +21,17 @@ import {
   faArrowUpFromBracket,
   faMagnifyingGlass,
 } from '@fortawesome/free-solid-svg-icons';
-import {HeaderBackground} from '../screens/Details/Details';
 import BootSplash from 'react-native-bootsplash';
 
 export type StackNavigatorParams = {
   Home: undefined;
   Filter: undefined;
   LocationSearch: undefined;
-  Details: undefined;
+  Details: {id: number};
   Restaurants: undefined;
   Dish: {id: number};
   Basket: undefined;
+  Header: undefined;
 };
 
 /////SWITCHED STACKS HERE FROM NATIVE TO STACK SO THE MODAL WOULD WORK
@@ -73,6 +73,11 @@ export type BottomSheetPropsNavigation = NativeStackNavigationProp<
 export type RestaurantPropsNavigation = NativeStackNavigationProp<
   StackNavigatorParams,
   'Restaurants'
+>;
+
+export type HeaderPropsNavigation = NativeStackNavigationProp<
+  StackNavigatorParams,
+  'Header'
 >;
 
 ////// SMALL HEADER COMPONENTS
@@ -132,7 +137,7 @@ const Navigator = () => {
   return (
     <NavigationContainer
       onReady={() => {
-        BootSplash.hide();
+        BootSplash.hide().then(() => {});
       }}>
       <RootStack.Navigator>
         <RootStack.Group>
@@ -159,13 +164,18 @@ const Navigator = () => {
             name={'Details'}
             component={Details}
             options={{
-              // headerShown: false,
-              title: '',
+              headerShown: false,
+              // headerTitle: 'Details 2',
+              headerTitle: '',
               headerTransparent: true,
-              headerTintColor: Colors.primary,
+              // headerTintColor: Colors.primary,
+              // headerTitle: () => <HeaderBackground />,
               headerLeft: () => HeaderLeftDetails(),
               headerRight: () => HeaderRightDetails(),
-              headerBackground: () => HeaderBackground(),
+              // headerBackground: () => WhiteBg(),
+              headerStyle: {
+                backgroundColor: 'white',
+              },
             }}
           />
           <RootStack.Screen

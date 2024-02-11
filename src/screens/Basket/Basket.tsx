@@ -37,7 +37,9 @@ const Basket: FC<BasketProps> = ({navigation}) => {
             {item.quantity}x
           </Text>
           <Text style={{flex: 1, fontSize: 18}}>{item.name}</Text>
-          <Text style={{fontSize: 18}}>${item.price * item.quantity}</Text>
+          <Text style={{fontSize: 18}}>
+            ${(item.price * item.quantity).toFixed(2)}
+          </Text>
         </View>
       </SwipeableRow>
     );
@@ -49,7 +51,7 @@ const Basket: FC<BasketProps> = ({navigation}) => {
         {/*<View style={{height: 1, backgroundColor: Colors.grey}}></View>*/}
         <View style={styles.totalRow}>
           <Text style={styles.total}>Subtotal</Text>
-          <Text style={{fontSize: 18}}>${total}</Text>
+          <Text style={{fontSize: 18}}>${total.toFixed(2)}</Text>
         </View>
 
         <View style={styles.totalRow}>

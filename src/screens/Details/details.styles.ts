@@ -1,8 +1,13 @@
-import {Dimensions, Platform, StyleSheet} from 'react-native';
-import {horizontalScale, scaleFontSize, verticalScale} from '@utils';
+import {Dimensions, StyleSheet} from 'react-native';
+import {
+  horizontalScale,
+  scaleFontSize,
+  verticalScale,
+  getResponsive,
+} from '@utils';
 import {Colors} from '@constants';
-const {width, height} = Dimensions.get('window');
-const IMG_HEIGHT = verticalScale(200);
+const {width} = Dimensions.get('window');
+const IMG_HEIGHT = getResponsive(200, 'height');
 
 const styles = StyleSheet.create({
   container: {
@@ -15,12 +20,17 @@ const styles = StyleSheet.create({
     height: IMG_HEIGHT,
   },
   header: {
-    backgroundColor: '#fff',
-    // height: verticalScale(90),
-    height: Platform.OS === 'ios' ? height / 7.5 : height / 8,
+    height: verticalScale(80),
     alignItems: 'center',
-    justifyContent: 'flex-end',
-    paddingBottom: verticalScale(20),
+    justifyContent: 'space-between',
+    flexDirection: 'row',
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    zIndex: 100,
+    paddingTop: verticalScale(40),
+    paddingHorizontal: horizontalScale(12),
   },
   restaurantName: {
     fontSize: scaleFontSize(30),
@@ -70,7 +80,7 @@ const styles = StyleSheet.create({
     height: 50,
     left: 0,
     right: 0,
-    top: verticalScale(90.05),
+    top: verticalScale(80),
     backgroundColor: '#fff',
     overflow: 'hidden',
     paddingBottom: 4,
@@ -156,6 +166,23 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     fontSize: scaleFontSize(16),
   },
+  rightButtons: {
+    flexDirection: 'row',
+  },
+  roundBtnRight: {
+    marginRight: horizontalScale(10),
+  },
+  buttonWrapper: {
+    width: 40,
+    height: 40,
+    borderRadius: 20,
+    backgroundColor: 'white',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  // roundBtn: {
+  //   marginLeft: horizontalScale(1),
+  // },
 });
 
 export default styles;
