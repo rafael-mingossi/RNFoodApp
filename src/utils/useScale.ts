@@ -4,21 +4,21 @@ import DeviceInfo from 'react-native-device-info';
 
 const {width, height} = Dimensions.get('window');
 
-{
-  Platform.OS === 'android'
-    ? console.log('Width android =>>', width)
-    : console.log('Width IOS =>>', width);
-}
-{
-  Platform.OS === 'android'
-    ? console.log('Height android =>>', height)
-    : console.log('Height IOS =>>', height);
-}
-{
-  Platform.OS === 'android'
-    ? console.log('NOTCH android =>>', DeviceInfo.hasNotch())
-    : console.log('NOTCH IOS =>>', DeviceInfo.hasNotch());
-}
+// {
+//   Platform.OS === 'android'
+//     ? console.log('Width android =>>', width)
+//     : console.log('Width IOS =>>', width);
+// }
+// {
+//   Platform.OS === 'android'
+//     ? console.log('Height android =>>', height)
+//     : console.log('Height IOS =>>', height);
+// }
+// {
+//   Platform.OS === 'android'
+//     ? console.log('NOTCH android =>>', DeviceInfo.hasNotch())
+//     : console.log('NOTCH IOS =>>', DeviceInfo.hasNotch());
+// }
 export function useScale() {
   const {top} = useSafeAreaInsets();
   const getResponsive = (
