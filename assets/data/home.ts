@@ -28,6 +28,7 @@ export const categories = [
 export const restaurants = [
   {
     name: 'Vapiano',
+    id: 1,
     rating: '4.5 Excellent',
     ratings: '(500+)',
     distance: '0.7 miles away',
@@ -37,7 +38,7 @@ export const restaurants = [
   },
   {
     name: '✨Urban Greens✨',
-    id: '2',
+    id: 2,
     rating: '4.9 Excellent',
     ratings: '(500+)',
     distance: '1.7 miles away',
@@ -47,7 +48,7 @@ export const restaurants = [
   },
   {
     name: 'El Minero',
-    id: '3',
+    id: 3,
     rating: '4.5 Excellent',
     ratings: '(500+)',
     distance: '3 miles away',

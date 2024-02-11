@@ -26,7 +26,11 @@ const Restaurants = () => {
       {restaurants.map((restaurant, index) => (
         <TouchableOpacity
           key={index}
-          onPress={() => navigation.navigate('Details')}>
+          onPress={() =>
+            navigation.navigate('Details', {
+              id: restaurant.id,
+            })
+          }>
           <View style={styles.categoryCard}>
             <Image source={restaurant.img} style={styles.image} />
             <View style={styles.categoryBox}>
