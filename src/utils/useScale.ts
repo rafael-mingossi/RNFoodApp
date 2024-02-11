@@ -1,8 +1,7 @@
-import {Dimensions, Platform} from 'react-native';
+import {Dimensions} from 'react-native';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
-import DeviceInfo from 'react-native-device-info';
 
-const {width, height} = Dimensions.get('window');
+const {width} = Dimensions.get('window');
 
 // {
 //   Platform.OS === 'android'
