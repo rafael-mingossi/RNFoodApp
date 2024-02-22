@@ -17,6 +17,7 @@ import {
   faMagnifyingGlass,
   faArrowUpAZ,
 } from '@fortawesome/free-solid-svg-icons';
+import {useLocationStore} from '@store';
 import {Colors} from '@constants';
 import {BottomSheetModal} from '@gorhom/bottom-sheet';
 import {FilterPropsNavigation} from '@config';
@@ -57,6 +58,7 @@ const SearchBar = () => {
 
 const CustomHeader = () => {
   const bottomSheetRef = useRef<BottomSheetModal>(null);
+  const {country} = useLocationStore();
   const openModal = () => {
     bottomSheetRef.current?.present();
   };
@@ -74,7 +76,7 @@ const CustomHeader = () => {
         <TouchableOpacity style={styles.titleContainer} onPress={openModal}>
           <Text style={styles.title}>Delivery · Now</Text>
           <View style={styles.locationName}>
-            <Text style={styles.subtitle}>London</Text>
+            <Text style={styles.subtitle}>{country}</Text>
             <FontAwesomeIcon
               icon={faChevronDown}
               size={16}

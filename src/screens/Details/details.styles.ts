@@ -1,10 +1,5 @@
 import {Dimensions, StyleSheet} from 'react-native';
-import {
-  horizontalScale,
-  scaleFontSize,
-  verticalScale,
-  getResponsive,
-} from '@utils';
+import {horizontalScale, scaleFontSize, verticalScale} from '@utils';
 import {Colors} from '@constants';
 const {width} = Dimensions.get('window');
 const IMG_HEIGHT = verticalScale(190);

@@ -22,12 +22,7 @@ import Animated, {
   useScrollViewOffset,
 } from 'react-native-reanimated';
 import {restaurant} from '@assets';
-import {
-  horizontalScale,
-  scaleFontSize,
-  verticalScale,
-  getResponsive,
-} from '@utils';
+import {horizontalScale, scaleFontSize, verticalScale} from '@utils';
 import {DetailsProps, HeaderPropsNavigation} from '@config';
 import {useBasketStore} from '@store';
 import styles from './details.styles';
