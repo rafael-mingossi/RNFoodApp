@@ -1,4 +1,4 @@
-import React, {useRef, useState, FC} from 'react';
+import React, {useRef, FC, useState} from 'react';
 import {
   View,
   Text,
@@ -8,6 +8,10 @@ import {
   Image,
   SectionListRenderItem,
   SafeAreaView,
+  StatusBar,
+  StatusBarStyle,
+  NativeSyntheticEvent,
+  NativeScrollEvent,
 } from 'react-native';
 import Animated, {
   interpolate,
@@ -16,16 +20,9 @@ import Animated, {
   useAnimatedRef,
   useAnimatedStyle,
   useScrollViewOffset,
-  useSharedValue,
-  withTiming,
 } from 'react-native-reanimated';
 import {restaurant} from '@assets';
-import {
-  horizontalScale,
-  scaleFontSize,
-  verticalScale,
-  getResponsive,
-} from '@utils';
+import {horizontalScale, scaleFontSize, verticalScale} from '@utils';
 import {DetailsProps, HeaderPropsNavigation} from '@config';
 import {useBasketStore} from '@store';
 import styles from './details.styles';
@@ -41,7 +38,8 @@ import {useNavigation} from '@react-navigation/native';
 // import {useRoute} from '@react-navigation/native';
 
 const {width} = Dimensions.get('window');
-const IMG_HEIGHT = getResponsive(200, 'height');
+const IMG_HEIGHT = verticalScale(190);
+// const IMG_HEIGHT = getResponsive(200, 'height');
 
 let scrollOfSet: SharedValue<number>;
 
@@ -64,7 +62,8 @@ interface Section {
 const Details: FC<DetailsProps> = ({navigation, route}) => {
   const {items, total} = useBasketStore();
   const {id} = route.params;
-  const item = getRestaurantById(id)!;
+  const itemId = getRestaurantById(id)!;
+  const [barColor, setBarColor] = useState<StatusBarStyle>('default');
 
   ////USED IN THE PARALLAX SCROLL
   const scrollRef = useAnimatedRef<Animated.ScrollView>();
@@ -75,20 +74,20 @@ const Details: FC<DetailsProps> = ({navigation, route}) => {
   // const itemsRef = useRef<TouchableOpacity[]>([]);
   const tabRef = useRef<SectionList<Item, Section>>(null);
 
-  const opacity = useSharedValue(0);
+  // const opacity = useSharedValue(0);
   // const route = useRoute();
   // console.log(route.name);
-  const [activeIndex, setActiveIndex] = useState(0);
+  // const [activeIndex, setActiveIndex] = useState(0);
 
-  const DATA = item.food.map((item, index) => ({
+  const DATA = itemId.food.map((item, index) => ({
     title: item.category,
     data: item.meals,
     index,
   }));
 
-  const animatedStyles = useAnimatedStyle(() => ({
-    opacity: opacity.value,
-  }));
+  // const animatedStyles = useAnimatedStyle(() => ({
+  //   opacity: opacity.value,
+  // }));
 
   ///USING INTERPOLATE HERE SO WE CAN MAP ONE VALUE TO SOME OTHER VALUE
   const imageAnimatedStyles = useAnimatedStyle(() => {
@@ -153,12 +152,21 @@ const Details: FC<DetailsProps> = ({navigation, route}) => {
   // };
 
   ///THIS IS FOR THE STICKY MENU SEGMENT
-  const onScroll = (event: any) => {
+  // const onScroll = (event: any) => {
+  //   const y = event.nativeEvent.contentOffset.y;
+  //   if (y > verticalScale(180)) {
+  //     opacity.value = withTiming(1);
+  //   } else {
+  //     opacity.value = withTiming(0);
+  //   }
+  // };
+
+  const onScroll = (event: NativeSyntheticEvent<NativeScrollEvent>) => {
     const y = event.nativeEvent.contentOffset.y;
-    if (y > verticalScale(180)) {
-      opacity.value = withTiming(1);
+    if (y > verticalScale(160)) {
+      setBarColor('dark-content');
     } else {
-      opacity.value = withTiming(0);
+      setBarColor('default');
     }
   };
 
@@ -176,6 +184,12 @@ const Details: FC<DetailsProps> = ({navigation, route}) => {
 
   return (
     <View style={styles.container}>
+      <StatusBar
+        translucent={true}
+        backgroundColor={'transparent'}
+        barStyle={barColor}
+        showHideTransition={'slide'}
+      />
       <HeaderBackground />
       <Animated.ScrollView
         onScroll={onScroll}
@@ -183,22 +197,22 @@ const Details: FC<DetailsProps> = ({navigation, route}) => {
         scrollEventThrottle={16}
         showsVerticalScrollIndicator={false}>
         <Animated.Image
-          source={item.img}
+          source={itemId.img}
           style={[styles.image, imageAnimatedStyles]}
         />
         <View
           style={{
             backgroundColor: '#fff',
           }}>
-          <Text style={styles.restaurantName}>{item.name}</Text>
+          <Text style={styles.restaurantName}>{itemId.name}</Text>
           <Text style={styles.restaurantDescription}>
-            {item.delivery} •{' '}
-            {item.tags.map(
+            {itemId.delivery} •{' '}
+            {itemId.tags.map(
               (tag, index) =>
-                `${tag}${index < item.tags.length - 1 ? ' • ' : ''}`,
+                `${tag}${index < itemId.tags.length - 1 ? ' • ' : ''}`,
             )}
           </Text>
-          <Text style={styles.restaurantDescription}>{item.about}</Text>
+          <Text style={styles.restaurantDescription}>{itemId.about}</Text>
           {/*/////SECTION LIST GOES HERE/////*/}
           <SectionList
             ref={tabRef}
@@ -213,7 +227,7 @@ const Details: FC<DetailsProps> = ({navigation, route}) => {
             )}
             ItemSeparatorComponent={() => separatorLine()}
             SectionSeparatorComponent={() => separatorLine()}
-            onScrollToIndexFailed={err => {
+            onScrollToIndexFailed={_ => {
               const wait = new Promise(resolve => setTimeout(resolve, 600));
               wait.then(() => {
                 tabRef?.current?.scrollToLocation({
