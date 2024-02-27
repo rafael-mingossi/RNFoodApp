@@ -1,4 +1,4 @@
-import React, {useRef} from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import {
   Text,
   View,
@@ -7,6 +7,7 @@ import {
   TouchableOpacity,
   Image,
   TextInput,
+  Pressable,
 } from 'react-native';
 import {BottomSheet} from '@components';
 import {useNavigation} from '@react-navigation/native';
@@ -17,14 +18,29 @@ import {
   faMagnifyingGlass,
   faArrowUpAZ,
 } from '@fortawesome/free-solid-svg-icons';
-import {useLocationStore} from '@store';
+import {useLocationStore, useCategoryStore} from '@store';
 import {Colors} from '@constants';
 import {BottomSheetModal} from '@gorhom/bottom-sheet';
 import {FilterPropsNavigation} from '@config';
 import {verticalScale} from '@utils';
+import {categories as allCategories} from '@assets';
 
 const SearchBar = () => {
   const navigation: FilterPropsNavigation = useNavigation();
+  const {categories, setFilteredData} = useCategoryStore();
+  const [searchedWord, setSearchedWord] = useState('');
+
+  useEffect(() => {
+    const filter = categories.filter(val => {
+      return val.text.toLowerCase().includes(searchedWord.toLowerCase());
+    });
+
+    if (searchedWord === '') {
+      setFilteredData(allCategories);
+    } else {
+      setFilteredData(filter);
+    }
+  }, [searchedWord]);
 
   return (
     <View style={styles.searchContainer}>
@@ -38,6 +54,10 @@ const SearchBar = () => {
             />
           </View>
           <TextInput
+            defaultValue={searchedWord}
+            onChangeText={event => {
+              setSearchedWord(event);
+            }}
             style={styles.input}
             placeholder="Restaurants, groceries, dishes"
           />
@@ -77,11 +97,13 @@ const CustomHeader = () => {
           <Text style={styles.title}>Delivery · Now</Text>
           <View style={styles.locationName}>
             <Text style={styles.subtitle}>{country}</Text>
-            <FontAwesomeIcon
-              icon={faChevronDown}
-              size={16}
-              color={Colors.primary}
-            />
+            <View style={styles.iconWrapper}>
+              <FontAwesomeIcon
+                icon={faChevronDown}
+                size={16}
+                color={Colors.primary}
+              />
+            </View>
           </View>
         </TouchableOpacity>
 
@@ -130,6 +152,9 @@ const styles = StyleSheet.create({
   subtitle: {
     fontSize: 18,
     fontWeight: 'bold',
+  },
+  iconWrapper: {
+    marginLeft: 5,
   },
   profileButton: {
     backgroundColor: Colors.lightGrey,

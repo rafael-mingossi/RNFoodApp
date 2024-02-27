@@ -1,9 +1,10 @@
 import React from 'react';
 import {View, Text, ScrollView, StyleSheet, Image} from 'react-native';
-import {categories} from '@assets';
 import {horizontalScale, scaleFontSize} from '@utils';
+import {useCategoryStore} from '@store';
 
 const Categories = () => {
+  const {categories} = useCategoryStore();
   return (
     <ScrollView
       horizontal
