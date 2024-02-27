@@ -1,9 +1,10 @@
 import React from 'react';
 import {View, Text, ScrollView, StyleSheet, Image} from 'react-native';
-import {categories} from '@assets';
 import {horizontalScale, scaleFontSize} from '@utils';
+import {useCategoryStore} from '@store';
 
 const Categories = () => {
+  const {categories} = useCategoryStore();
   return (
     <ScrollView
       horizontal
@@ -13,7 +14,7 @@ const Categories = () => {
       }}>
       {categories.map((category, index) => (
         <View style={styles.categoryCard} key={index}>
-          <Image source={category.img} />
+          <Image source={category.img} style={styles.img} />
           <Text style={styles.categoryText}>{category.text}</Text>
         </View>
       ))}
@@ -23,9 +24,8 @@ const Categories = () => {
 const styles = StyleSheet.create({
   categoryCard: {
     width: horizontalScale(100),
-    height: 100,
-    backgroundColor: '#fff',
-    // marginEnd: horizontalScale(10),
+    backgroundColor: 'white',
+    marginRight: horizontalScale(10),
     elevation: 3,
     shadowColor: '#000',
     shadowOffset: {
@@ -34,6 +34,9 @@ const styles = StyleSheet.create({
     },
     shadowOpacity: 0.06,
     borderRadius: 4,
+  },
+  img: {
+    width: '100%',
   },
   categoryText: {
     padding: 6,

@@ -15,6 +15,7 @@ import {GooglePlacesAutocomplete} from 'react-native-google-places-autocomplete'
 import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
 import {faMagnifyingGlass} from '@fortawesome/free-solid-svg-icons';
 import {REACT_APP_GOOGLE_API_KEY} from '@env';
+import {useLocationStore} from '@store';
 
 // const {width, height} = Dimensions.get('window');
 // const ASPECT_RATIO = width / height;
@@ -24,6 +25,7 @@ import {REACT_APP_GOOGLE_API_KEY} from '@env';
 // const LONGITUDE_DELTA = LATITUDE_DELTA * ASPECT_RATIO;
 
 const LocationSearch = () => {
+  const {setCountry} = useLocationStore();
   const navigation = useNavigation();
   // const data = {
   //   region: {
@@ -46,7 +48,8 @@ const LocationSearch = () => {
         placeholder="Search or move the map"
         fetchDetails={true}
         onPress={(data, detail) => {
-          console.log('OP =>>', data);
+          // console.log('OP =>>', data);
+          setCountry(data.structured_formatting.main_text);
           const point = detail?.geometry?.location;
           if (!point) {
             return;
@@ -139,7 +142,7 @@ const styles = StyleSheet.create({
   boxIcon: {
     position: 'absolute',
     left: horizontalScale(15),
-    top: verticalScale(18),
+    top: '45%',
     zIndex: 1,
   },
 });

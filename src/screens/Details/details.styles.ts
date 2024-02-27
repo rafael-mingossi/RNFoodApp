@@ -1,13 +1,9 @@
 import {Dimensions, StyleSheet} from 'react-native';
-import {
-  horizontalScale,
-  scaleFontSize,
-  verticalScale,
-  getResponsive,
-} from '@utils';
+import {horizontalScale, scaleFontSize, verticalScale} from '@utils';
 import {Colors} from '@constants';
 const {width} = Dimensions.get('window');
-const IMG_HEIGHT = getResponsive(200, 'height');
+const IMG_HEIGHT = verticalScale(190);
+// const IMG_HEIGHT = getResponsive(200, 'height');
 
 const styles = StyleSheet.create({
   container: {
@@ -20,7 +16,8 @@ const styles = StyleSheet.create({
     height: IMG_HEIGHT,
   },
   header: {
-    height: verticalScale(80),
+    height: verticalScale(100),
+    // height: verticalScale(80),
     alignItems: 'center',
     justifyContent: 'space-between',
     flexDirection: 'row',
